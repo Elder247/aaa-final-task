@@ -1,46 +1,70 @@
-from abc import ABC, abstractmethod
-from functools import total_ordering
+from abc import ABC
+from typing import Dict
 
 
-@total_ordering
 class Pizza(ABC):
-    def __init__(self):
-        ingredients = ['tomato sauce', 'mozzarella']
-        size = None
+    def __init__(self, size_value: str = 'L') -> None:
+        self.size(size_value)
+        self.ingredients: Dict[str, str] = {}
+        self.symbol: str = ''
 
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return self.size == other.size
+    def __eq__(self, other: object) -> bool:
+        """Проверяет равенство пицц по размеру и ингредиентам"""
+        if isinstance(other, Pizza):
+            return self.size == other.size and self.ingredients == other.ingredients
         return NotImplemented
 
-    def __lt__(self, other):
-        if isinstance(other, self.__class__):
-            if self.size == 'L' and other.size == 'XL':
-                return True
-            return False
-        return NotImplemented
+    def __str__(self) -> str:
+        return f'{self.__class__.__name__} {self.symbol}'
+
+    def dict(self) -> Dict[str, str]:
+        """Выводит рецепт пиццы в виде словаря dict"""
+        print(self.ingredients)
+        return self.ingredients
+
+    @property
+    def size(self):
+        return self._size
+
+    @size.setter
+    def size(self, value):
+        if value not in ('L', 'XL'):
+            raise ValueError
+        self._size = value
 
 
 
 class Margherita(Pizza):
-    def __init__(self):
-        symbol = u'\U0001F345'
+    def __init__(self, size: str = 'L'):
+        super().__init__(size)
+        self.symbol = u'\U0001F345'  # 🍅
+        self.ingredients = {'tomato sauce': '1 cup',
+                            'mozzarella': '7 ounces',
+                            'tomatoes': '3'}
+
 
 class Pepperoni(Pizza):
-    def __init__(self):
-        symbol = u'\U0001F355'
+    def __init__(self, size: str = 'L'):
+        super().__init__(size)
+        self.symbol = u'\U0001F355'  # 🍕
+        self.ingredients = {'tomato sauce': '1 cup',
+                            'mozzarella': '7 ounces',
+                            'pepperoni': '5'}
 
 
 class Hawaiian(Pizza):
-    def __init__(self):
-        symbol = u'\U0001F34D'
+    def __init__(self, size: str = 'L'):
+        super().__init__(size)
+        self.symbol = u'\U0001F34D'  # 🍍
+        self.ingredients = {'tomato sauce': '1 cup',
+                            'mozzarella': '7 ounces',
+                            'chicken': '10 ounces',
+                            'pineapples': '5 ounces'}
 
 
+if __name__ == '__main__':
+    margherita = Margherita('XL')
+    pepperoni = Pepperoni()
 
-
-
-
-
-
-
-
+    print(margherita)
+    print(pepperoni)
