@@ -4,7 +4,7 @@ from typing import Dict
 
 class Pizza(ABC):
     def __init__(self, size_value: str = 'L') -> None:
-        self.size(size_value)
+        self.size = size_value
         self.ingredients: Dict[str, str] = {}
         self.symbol: str = ''
 
@@ -28,8 +28,10 @@ class Pizza(ABC):
 
     @size.setter
     def size(self, value):
+        if not isinstance(value, str):
+            raise TypeError('Only string type available')
         if value not in ('L', 'XL'):
-            raise ValueError
+            raise ValueError('Only L and XL sizes for pizza available')
         self._size = value
 
 

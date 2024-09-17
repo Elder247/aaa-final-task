@@ -1,4 +1,5 @@
 import pytest
+from PIL.TiffTags import TYPES
 from pizza import Margherita, Pepperoni, Hawaiian
 from utils import log, delivery, pickup
 
@@ -23,8 +24,30 @@ def test_dict_pizzas():
     assert Hawaiian().dict() == expected_hawaiian
 
 
+def test_sizes_pizzas():
+    """Проверка значений размера пиццы"""
+    assert Margherita('L').size == 'L'
+    assert Margherita('XL').size == 'XL'
+    with pytest.raises(TypeError):
+        Margherita(10)
+    with pytest.raises(ValueError):
+        Margherita('S')
+
+
 def test_eq_pizzas():
+    """Проверка метода __eq__() для пицц с одинаковыми и разными размерами и ингредиентами"""
     pizza1 = Margherita()
     pizza2 = Margherita('L')
     pizza3 = Margherita('XL')
-    pizza4 = Margherita('S')
+    pizza4 = Pepperoni()
+
+    assert pizza1 == pizza2
+    assert pizza1 != pizza3  # неравенство по размеру
+    assert pizza1 != pizza4  # неравенство по ингредиентам
+
+
+def test_str_pizzas():
+    """Проверка метода __str__() для пицц"""
+    assert str(Margherita()) == 'Margherita 🍅'
+    assert str(Pepperoni()) == 'Pepperoni 🍕'
+    assert str(Hawaiian()) == 'Hawaiian 🍍'
