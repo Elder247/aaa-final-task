@@ -1,5 +1,4 @@
 import pytest
-from PIL.TiffTags import TYPES
 from pizza import Margherita, Pepperoni, Hawaiian
 from utils import log, delivery, pickup
 
@@ -24,7 +23,7 @@ def test_dict_pizzas():
     assert Hawaiian().dict() == expected_hawaiian
 
 
-def test_sizes_pizzas():
+def test_set_size_pizzas():
     """Проверка значений размера пиццы"""
     assert Margherita('L').size == 'L'
     assert Margherita('XL').size == 'XL'
@@ -35,7 +34,10 @@ def test_sizes_pizzas():
 
 
 def test_eq_pizzas():
-    """Проверка метода __eq__() для пицц с одинаковыми и разными размерами и ингредиентами"""
+    """
+    Проверка метода __eq__() для пицц с одинаковыми и разными
+    размерами и ингредиентами
+    """
     pizza1 = Margherita()
     pizza2 = Margherita('L')
     pizza3 = Margherita('XL')
@@ -51,3 +53,40 @@ def test_str_pizzas():
     assert str(Margherita()) == 'Margherita 🍅'
     assert str(Pepperoni()) == 'Pepperoni 🍕'
     assert str(Hawaiian()) == 'Hawaiian 🍍'
+
+
+def test_delivery_pickup_before_decoration():
+    """Проверка функций delivery() и pickup() до декорирования"""
+    pizza = Margherita()
+    assert delivery.__wrapped__(pizza) == pizza
+    assert pickup.__wrapped__(pizza) == pizza
+    with pytest.raises(TypeError):
+        delivery('Margherita')
+        pickup('Margherita')
+
+
+def test_delivery_pickup_after_decoration(capsys: pytest.CaptureFixture):
+    """Проверка функций delivery() и pickup() после декорирования"""
+    pizza = Margherita()
+    assert delivery.__name__ == 'delivery'
+    assert pickup.__name__ == 'pickup'
+
+    delivery(pizza)
+    captured = capsys.readouterr()
+    assert captured.out.startswith('Доставили за ')
+    assert captured.out.endswith('с!\n')
+    assert '{}' not in captured.out
+
+
+def test_log_decorator(capsys: pytest.CaptureFixture):
+    """Проверка возвращаемого значения декоратора log()"""
+
+    @log('Проверочное сообщение {}!')
+    def wrapped_func() -> None:
+        pass
+
+    wrapped_func()
+    captured = capsys.readouterr()
+    assert captured.out.startswith('Проверочное сообщение ')
+    assert captured.out.endswith('!\n')
+    assert '{}' not in captured.out

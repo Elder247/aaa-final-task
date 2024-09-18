@@ -1,11 +1,14 @@
 from functools import wraps
 from random import randint
 from typing import Callable
-from pizza import Margherita, Pepperoni, Hawaiian
+from pizza import Pizza, Margherita, Pepperoni, Hawaiian
 
 
 def log(pattern: str = '{}c!') -> Callable:
-    """Декоратор для вывода времени выполнения функции. Время подставляется в шаблон pattern вместо символов {}"""
+    """
+    Декоратор для вывода времени выполнения функции.
+    Время подставляется в шаблон pattern вместо символов {}
+    """
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
@@ -19,17 +22,22 @@ def log(pattern: str = '{}c!') -> Callable:
 
 
 @log('Доставили за {}с!')
-def delivery(pizza):
+def delivery(pizza_obj: Pizza) -> Pizza:
     """Доставляет пиццу"""
-    return pizza
+    if not isinstance(pizza_obj, Pizza):
+        raise TypeError('Can take only Pizza object')
+    return pizza_obj
 
 
 @log('Забрали за {}с!')
-def pickup(pizza):
+def pickup(pizza_obj: Pizza) -> Pizza:
     """Самовывоз"""
-    return pizza
+    if not isinstance(pizza_obj, Pizza):
+        raise TypeError('Can take only Pizza object')
+    return pizza_obj
 
 
 if __name__ == '__main__':
-    delivery(Margherita())
+    f = delivery(Margherita())
     pickup(Pepperoni())
+    pickup(Hawaiian())
