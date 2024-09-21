@@ -1,5 +1,5 @@
 import click
-from pizza import Margherita, Pepperoni, Hawaiian
+from pizza import ALL_PIZZAS
 
 
 @click.group()
@@ -29,7 +29,8 @@ def order(pizza: str, delivery: bool) -> None:
 @cli.command()
 def menu() -> None:
     """Выводит меню"""
-    for pizza in (Margherita(), Pepperoni(), Hawaiian()):
+    for PizzaClass in ALL_PIZZAS:
+        pizza = PizzaClass()
         ingredients_string = ', '.join(
             f'{key}: {value}' for key, value in pizza.ingredients.items()
         )

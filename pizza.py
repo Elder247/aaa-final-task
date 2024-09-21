@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Dict, Any
+from typing import Type, List, Dict, Any
 
 
 class Pizza(ABC):
@@ -66,6 +66,9 @@ class Hawaiian(Pizza):
                             'chicken': '10 ounces',
                             'pineapples': '5 ounces'}
 
+
+# Список всех классов пицц
+ALL_PIZZAS: List[Type[Pizza]] = [Margherita, Pepperoni, Hawaiian]
 
 if __name__ == '__main__':
     margherita = Margherita('XL')

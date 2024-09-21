@@ -1,8 +1,43 @@
-# aaa-final-task
+# Pizza Application
 
-В проекте реализованы пиццы, интерфейс командной строки и тестирование кода.
+## Описание
+Приложение для управления заказами пицц через командную строку.
+Поддерживаются заказы различных пицц на доставку и самовывоз.
 
-### 1. Project structure:
+## Установка
+1. Склонируйте репозиторий
+```bash
+git clone https://github.com/Elder247/aaa-final-task.git
+```
+2. Перейдите в директорию проекта
+```bash
+cd aaa-final-task
+```
+3. Установите зависимости
+```bash
+pip install -r requirements.txt
+```
+
+## Использование
+### Просмотр меню
+```bash
+python cli.py menu
+```
+### Заказ пиццы с самовывозом
+```bash
+python cli.py order Margherita
+```
+### Заказ пиццы с доставкой
+```bash
+python cli.py order pepperoni --delivery
+```
+### Тестирование
+```bash
+pytest
+```
+
+
+## Структура
 ```
 pizza-prject
 |
@@ -12,10 +47,4 @@ pizza-prject
 |— test_pizza.py
 |— test_cli.py
 |— README.md
-```
-
-### 2. Requirements
-```
-click==8.1.7
-pytest==8.3.3
 ```
